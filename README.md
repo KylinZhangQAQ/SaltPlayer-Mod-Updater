@@ -19,6 +19,14 @@
 
 ![更新中心界面](screenshots/ui-java.png)
 
+## ⚠️ GitHub API 限制（重要）
+
+- GitHub **未登录匿名 API 限额为 60 次/小时**；批量检查、连续重试或短时间内多次点击“检查全部”很容易触发限制。
+- 触发后界面会显示 **`GH-403-RATE`**，并给出恢复时间；这时继续重试不会更快，反而会继续消耗/等待限额。
+- 建议在插件 **设置 → GitHub Token** 中填入一个只勾选 `public_repo` 的 classic Token。Token 只保存在本机插件数据目录，不会上传到任何服务器。
+- 一个 Token 可以显著提高 API 限额，适合一次检查多个模组；如果只是偶尔检查一两个模组，匿名访问通常够用。
+- 下载 Release 资产本身不占用 GitHub API 的 60 次/小时限额，但获取 Release 元数据会占用。
+
 ## 功能
 
 - **扫描全部已安装模组**：从 PF4J `MANIFEST.MF` 读取 `Plugin-Id`、`Plugin-Version`、`Plugin-Name`、`Plugin-Provider`、`Plugin-Open-Source-Url`。
@@ -190,6 +198,12 @@ src/main/java/dev/saltupdater/
 - 直接替换文件时，已经加载的插件类不会在运行中的 JVM 里重新加载；如果播放器仍显示旧版本，重启后生效。文件被占用时会自动转为关闭后安装。
 - 匿名 GitHub API 限额为 60 次/小时；批量检查较多模组时建议填写 Token。
 - 本插件自身的仓库是 <https://github.com/KylinZhangQAQ/SaltPlayer-Mod-Updater>，因此它也可以参与自更新；但正在运行的插件文件可能被占用，更新自身时通常会走“关闭后安装”。
+
+## 在插件库中找到本插件
+
+本仓库已添加 GitHub topic **`salt-player-plugins`**。在 Salt Player 的 **模组管理 → 寻找模组** 中，应可通过该 topic 发现本仓库；如果列表有缓存，请稍后重试或重启播放器。
+
+也可以直接打开 GitHub topic 页面查看：<https://github.com/topics/salt-player-plugins>
 
 ## 许可
 
