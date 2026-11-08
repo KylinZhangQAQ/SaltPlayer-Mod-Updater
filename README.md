@@ -11,21 +11,15 @@
 > 本项目的插件代码、界面、构建脚本和文档均由 AI 生成；仅使用 SPW Workshop API、PF4J 等第三方依赖。没有人工编写插件业务代码。
 
 > **适用版本**  
-> 本插件面向 **微软商店版（Microsoft Store）Salt Player for Windows**。实测环境为 **1.19.3**，Workshop API `0.1.0-dev22`。Steam 版的目录结构相同，但 Steam 创意工坊订阅的模组由 Steam 管理，本插件不调用 Steam 接口；在 Steam 版使用前请自行确认来源冲突。
+> 本插件面向 **微软商店版（Microsoft Store）Salt Player for Windows**。实测环境为 **1.19.3**，Workshop API `0.1.0-dev22`。Steam 版的目录结构相同；Steam 创意工坊内容由 Steam 客户端订阅和下载，本插件只在插件市场读取公开工坊元数据并跳转，不绕过 Steam。
 
 > **⚠️ GitHub API 限制（重要）**  
 > 未登录 GitHub 的匿名 API 限额只有 **60 次/小时**，批量检查、频繁重试或连续检查多个模组时很容易触发 `403 rate limit`。  
 > 建议在 **设置 → GitHub Token** 中填入只勾选 `public_repo` 的 Token；Token 只保存在本机插件数据目录，不会上传。触发限制时界面会显示 `GH-403-RATE` 和恢复时间。
 
-![更新中心界面](screenshots/ui-java.png)
-
-## ⚠️ GitHub API 限制（重要）
-
-- GitHub **未登录匿名 API 限额为 60 次/小时**；批量检查、连续重试或短时间内多次点击“检查全部”很容易触发限制。
-- 触发后界面会显示 **`GH-403-RATE`**，并给出恢复时间；这时继续重试不会更快，反而会继续消耗/等待限额。
-- 建议在插件 **设置 → GitHub Token** 中填入一个只勾选 `public_repo` 的 classic Token。Token 只保存在本机插件数据目录，不会上传到任何服务器。
-- 一个 Token 可以显著提高 API 限额，适合一次检查多个模组；如果只是偶尔检查一两个模组，匿名访问通常够用。
-- 下载 Release 资产本身不占用 GitHub API 的 60 次/小时限额，但获取 Release 元数据会占用。
+| 已安装模组 | 插件市场（Steam 筛选） |
+| --- | --- |
+| ![已安装模组](screenshots/installed.png) | ![插件市场](screenshots/ui-java.png) |
 
 ## 功能
 
@@ -40,12 +34,17 @@
   - 如果文件被 Salt Player 占用，自动生成后台安装任务，等播放器退出后备份旧版、解压新版、失败自动回滚，并可自动重启。
 - **安装前校验**：ZIP 完整性、路径穿越、插件 ID 与 Release 版本一致性、SHA-256（Release 提供 digest 时）。
 - **自动检查**：启动时检查 / 每日检查 / 仅手动，三选一；默认启动时检查并提示。
+- **插件市场**：GitHub 与 Steam 双源浏览、搜索和分类；GitHub 可直接安装/更新，Steam 只做展示并跳转到 Steam 客户端订阅；两个来源永远分组显示，不混在一起。
+- **备份管理**：可以彻底关闭备份、设置保留份数，并一键清理全部历史备份。
+- **Token 教程**：内置 GitHub Token 获取步骤，说明匿名 60 次/小时与 Token 限额差异。
+- **顶部入口**：实验性标题栏悬浮按钮；同时提供 `Ctrl+Alt+U` 全局快捷键和托盘菜单，按钮失效时仍可一键检查。
+- **现代卡片 UI**：浅色/深色自适应，统一圆角、按钮、开关、输入框、对话框和来源徽章。
 - **网络适配**：可填 GitHub Token（提高 API 限额）、代理；代理留空时自动使用 Windows 系统代理，填 `direct` 强制直连。
-- **零宿主权限**：不申请 `library-read`、`class-transform` 等权限，只在插件自己的数据目录和 `workshop/plugins` 内工作。
+- **零高危权限**：只申请可选的 `key-bindings`（用于快捷键），不申请 `library-read` 或 `class-transform`。
 
 ## 安装
 
-1. 从 [Releases](https://github.com/KylinZhangQAQ/SaltPlayer-Mod-Updater/releases/latest) 下载 `plugin-dev.saltupdater-1.0.0.spmod`。
+1. 从 [Releases](https://github.com/KylinZhangQAQ/SaltPlayer-Mod-Updater/releases/latest) 下载 `plugin-dev.saltupdater-1.1.0.spmod`。
 2. 打开 Salt Player → **设置 → 创意工坊 → 模组管理 → 导入模组**。
 3. 选择 `.spmod`，确认名称后导入。
 4. 在模组操作菜单选择 **启用**；本插件不申请权限，直接启用即可。
@@ -69,6 +68,25 @@
    - 失败时回滚；
    - 如果开启了“关闭后自动重启”，自动启动 Salt Player。
 
+### 插件市场
+
+窗口顶部有两个页签：
+
+- **已安装模组**：检查、下载和更新本地模组。
+- **插件市场**：搜索 GitHub 与 Steam 插件，按来源分组显示。
+
+市场里：
+- **GitHub 插件**：来自 GitHub topic `salt-player-plugins` 的仓库，可打开仓库或直接安装/更新；安装会读取最新 Release 的 `.spmod`。
+- **Steam 创意工坊**：只展示标题、封面、简介、订阅数和更新时间，点击 **在 Steam 打开** 跳转到 Steam 页面。Steam 内容由 Steam 客户端订阅和下载，本插件不绕过 Steam。
+- 来源筛选：全部 / GitHub / Steam；搜索会同时查询两个来源，但结果始终分节展示，不会混淆来源。
+
+### 备份管理
+
+- 设置里的 **保留安装备份** 可以完全关闭备份保留。
+- **保留备份数** 控制最多保留几份；关闭备份后不再保留任何历史备份。
+- **清理全部备份** 会删除已经保存的所有旧版备份，不影响当前已安装插件。
+- 即使关闭备份，安装失败时仍会使用一次临时回滚目录，成功后立即删除。
+
 ### 批量更新
 
 点 **全部更新**：先依次下载所有可更新模组，下载完成后统一确认安装。单个失败不会阻塞其他模组。
@@ -83,9 +101,13 @@
 | 包含预发布版本 | 关 | 开启后会检查 Pre-release |
 | 关闭后自动重启 | 开 | 仅对“关闭后安装”生效 |
 | 启动时打开更新中心 | 关 | 启动完成后自动打开窗口 |
-| 保留备份数 | 2 | 关闭后安装生成的备份数量 |
+| 标题栏悬浮按钮 | 开 | 实验性；失败时用 `Ctrl+Alt+U` 或托盘菜单 |
+| 保留安装备份 | 开 | 关闭后不保留任何历史备份 |
+| 保留备份数 | 2 | 仅开启备份时生效 |
 | GitHub Token | 空 | 可选；匿名 API 限额 60 次/小时 |
 | 代理 | 空 | 留空自动使用 Windows 系统代理；填 `direct` 强制直连 |
+
+Token 教程在设置里的 **如何获取**，或配置页的 **如何获取 GitHub Token**。匿名 API 限额为 **60 次/小时**，填 Token 后为 **5000 次/小时**。
 
 ## 错误代码
 
@@ -101,6 +123,13 @@
 | `GH-404` | 仓库/Release 不存在；检查仓库地址、是否公开 |
 | `GH-NO-RELEASE` | 没有可比较的 Release；确认作者发了 Release 且标签是版本号 |
 | `GH-ASSET-MISSING` | Release 没有 `.spmod` 资产；打开发布页手动下载 |
+| `GH-SEARCH` | GitHub 市场搜索返回异常；稍后重试 |
+| `STEAM-403` | Steam 暂时拒绝请求；稍后重试或打开浏览器 |
+| `STEAM-404` | Steam 工坊页面不存在 |
+| `STEAM-JSON` | Steam 详情数据解析失败 |
+| `STEAM-IO` | 读取 Steam 工坊失败；检查网络/代理 |
+| `MARKET-SEARCH` | 市场搜索失败；检查网络或 GitHub API 限额 |
+| `MARKET-INSTALL` | 从市场安装失败；查看日志和 Release 资产 |
 | `REPO-INVALID` | 仓库地址格式无法识别 |
 | `VER-INVALID` | 当前版本或标签不是可比较的版本号 |
 | `DL-404` | 下载地址失效；重新检查或打开发布页 |
@@ -128,6 +157,7 @@
 - 本仓库 `tools/` 下的编译依赖：
   - `spw-api.jar`（SPW Workshop API `0.1.0-dev22`，Apache-2.0）
   - `pf4j-3.12.0.jar`（Apache-2.0）
+  - `jna-5.17.0.jar`（Apache-2.0，用于实验性标题栏悬浮按钮）
 
 Windows：
 
@@ -139,7 +169,7 @@ Set-ExecutionPolicy -Scope Process Bypass
 产物：
 
 ```
-build/libs/plugin-dev.saltupdater-1.0.0.spmod
+build/libs/plugin-dev.saltupdater-1.1.0.spmod
 ```
 
 `build.ps1` 只做三件事：`javac --release 25` 编译、复制资源、用 `tools/Build.java` 生成 `.spmod`。插件运行时只依赖 `java.base` + `java.desktop`，不打包任何第三方运行时库。
@@ -174,11 +204,15 @@ src/main/java/dev/saltupdater/
     Downloader.java           流式下载、进度、取消、SHA-256
     PackageValidator.java     ZIP 安全校验与解压
     InstallService.java       直接安装、备份、回滚、关闭后安装
-    UpdateService.java        检查/下载/安装编排
+    UpdateService.java        检查/下载/安装编排、市场安装
+    SteamWorkshopClient.java  Steam 创意工坊浏览/搜索/详情（只读）
     ProxySupport.java         设置代理 + Windows 系统代理自动检测
     Json.java                 无第三方依赖的 JSON 读写
   ui/
-    UpdateCenterWindow.java   原生 Swing 更新中心
+    UpdateCenterWindow.java   更新中心、标签页、详情和对话框
+    MarketPanel.java          GitHub + Steam 双源插件市场
+    ImageCache.java           市场封面异步加载
+    TitlebarButton.java       实验性标题栏悬浮按钮（JNA）
 ```
 
 ## 安全与隐私
@@ -194,7 +228,9 @@ src/main/java/dev/saltupdater/
 
 - 只支持 GitHub Releases 中的 `.spmod` 资产；没有 `.spmod` 的 Release 会提示手动下载。暂不支持 `.zip` / 源码包。
 - GitHub 标签需要是可比较的版本号（`v1.2.3`、`1.2.3.4` 等）；纯日期标签也可以，但 `nightly` 这类标签无法比较。
-- Steam 创意工坊订阅的模组由 Steam 更新；本插件不会调用 Steam 接口。对 Steam 模组执行本地安装可能产生来源冲突，请自行确认。
+- Steam 创意工坊在市场中只做浏览、搜索和跳转；Steam 内容必须由 Steam 客户端在“拥有 SPW + 已订阅”的前提下下载，本插件不绕过 Steam 的授权与下载机制。
+- 实验性标题栏悬浮按钮通过独立顶层窗口实现，不会修改宿主 Compose UI；如果它被宿主窗口覆盖或位置不合适，可在设置中关闭，改用 `Ctrl+Alt+U` 或托盘菜单。
+- 市场 GitHub 搜索也受 GitHub API 限额影响；搜索过多时请填写 Token。
 - 直接替换文件时，已经加载的插件类不会在运行中的 JVM 里重新加载；如果播放器仍显示旧版本，重启后生效。文件被占用时会自动转为关闭后安装。
 - 匿名 GitHub API 限额为 60 次/小时；批量检查较多模组时建议填写 Token。
 - 本插件自身的仓库是 <https://github.com/KylinZhangQAQ/SaltPlayer-Mod-Updater>，因此它也可以参与自更新；但正在运行的插件文件可能被占用，更新自身时通常会走“关闭后安装”。
@@ -208,3 +244,4 @@ src/main/java/dev/saltupdater/
 ## 许可
 
 本插件代码使用 MIT License。SPW Workshop API 与 PF4J 的许可信息见 `tools/` 中对应依赖及上游仓库。
+
