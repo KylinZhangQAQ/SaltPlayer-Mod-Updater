@@ -1,47 +1,72 @@
-# v1.0.0 — 模组更新中心（完全由 AI 制作）
+# v1.1.0 — 双源插件市场、备份管理与现代 UI
 
 > **AI 声明 / AI Disclosure**  
-> 本项目的插件代码、界面、构建脚本和文档 **完全由 AI 生成**；仅使用 SPW Workshop API、PF4J 等第三方依赖。没有人工编写插件业务代码。
+> 本项目的插件代码、界面、构建脚本和文档 **完全由 AI 生成**；仅使用 SPW Workshop API、PF4J、JNA 等第三方依赖。没有人工编写插件业务代码。
 
 > **适用版本**  
-> 本版本面向 **微软商店版（Microsoft Store）Salt Player for Windows**。实测环境为 **SPW 1.19.3**、Workshop API `0.1.0-dev22`。Steam 版目录结构相同，但 Steam 创意工坊订阅的模组由 Steam 管理，本插件不调用 Steam 接口。
+> 本版本面向 **微软商店版（Microsoft Store）Salt Player for Windows**。实测环境为 **SPW 1.19.3**、Workshop API `0.1.0-dev22`。
 
 > **⚠️ GitHub API 限制（重要）**  
-> GitHub 匿名 API 限额只有 **60 次/小时**。批量检查、频繁重试或连续检查多个模组时很容易触发 `403 rate limit`。  
-> 建议在插件 **设置 → GitHub Token** 中填入只勾选 `public_repo` 的 Token；Token 只保存在本机插件数据目录，不会上传。触发限制时界面会显示 `GH-403-RATE` 和恢复时间。
+> GitHub 匿名 API 限额只有 **60 次/小时**；市场搜索还会额外消耗 GitHub Search 限额。批量检查、反复搜索或连续重试很容易触发 `403 rate limit`。  
+> 建议在 **设置 → GitHub Token** 中填入只勾选 `public_repo` 的 Token；Token 只保存在本机插件数据目录，不会上传。界面会显示 `GH-403-RATE` 和恢复时间。
 
-## 功能
+## 新增
 
-- 扫描 `workshop/plugins` 下全部模组，读取 PF4J `MANIFEST.MF` 中的 GitHub 仓库地址。
-- 读取 GitHub Releases，按版本号比较，自动选择 `.spmod` 资产。
-- 缺少 `Plugin-Open-Source-Url` 时，可在界面中手动补充仓库地址，并按插件 ID 记住。
-- 下载进度条、已下载/总大小、实时速度、取消按钮。
-- 下载完成后二次确认安装，显示版本、包名、大小、SHA-256。
-- 失败时显示错误代码、原因、建议和可复制的技术详情（例如 `NET-DNS`、`GH-403-RATE`、`GH-ASSET-MISSING`、`DL-HASH`、`PKG-ID-MISMATCH`、`INS-LOCKED`）。
-- 先尝试直接替换；文件被占用时自动转为“关闭 Salt Player 后安装”，备份旧版、失败回滚，并可自动重启。
-- 自动检查：启动时检查 / 每日检查 / 仅手动，默认启动时检查。
-- **零宿主权限**：不申请 `library-read` 或 `class-transform`。
+### 备份管理
+
+- 新增 **保留安装备份** 总开关，可以彻底关闭历史备份。
+- 新增 **清理全部备份**，一键删除所有旧版备份，不影响当前插件。
+- 保留份数仍可设置；关闭备份后，安装失败时只使用临时回滚目录，成功后立即删除。
+
+### GitHub Token 教程
+
+- 设置里新增 **如何获取**，配置页新增 **如何获取 GitHub Token**。
+- 内置六步图文式说明：创建 classic Token、勾选 `public_repo`、复制 `ghp_...`、粘贴保存。
+- 明确说明匿名 60 次/小时与 Token 5000 次/小时的区别，以及 Token 只保存在本机。
+
+### 双源插件市场
+
+- 顶部新增 **已安装模组 / 插件市场** 两个页签。
+- 市场同时支持 **GitHub** 和 **Steam 创意工坊**：
+  - GitHub：搜索 topic `salt-player-plugins`，可直接从最新 Release 安装/更新 `.spmod`。
+  - Steam：读取公开工坊标题、封面、简介、订阅数和更新时间，点击“在 Steam 打开”跳转到工坊页面。
+- 来源筛选：全部 / GitHub / Steam；搜索结果 **永远分组展示**，不会把两个来源混在一起。
+- Steam 内容由 Steam 客户端订阅和下载；本插件不绕过 Steam 的授权机制。如果 Steam 条目没有可直接安装的 `.spmod`，市场只提供浏览和跳转。
+
+### 顶部入口
+
+- 新增实验性 **标题栏悬浮按钮**：在 SPW 主窗口标题栏显示“更新”按钮。
+- 同时提供稳定回退：
+  - 全局快捷键 **Ctrl+Alt+U**（需要 `key-bindings` 权限）
+  - 系统托盘菜单：打开更新中心 / 一键检查 / 隐藏托盘图标
+- 标题栏按钮失效时，快捷键和托盘仍然可用；可在设置中关闭悬浮按钮。
+
+### UI 重做
+
+- 顶部页签、来源徽章、主题化按钮/开关/分段选择器。
+- 自定义 GitHub 仓库输入对话框，替换旧的 `JOptionPane` 外观。
+- 浅色/深色跟随 Windows 主题，统一圆角、间距、字体和状态颜色。
+- 插件市场卡片支持异步封面/头像加载。
 
 ## 安装
 
-1. 下载本 Release 中的 `plugin-dev.saltupdater-1.0.0.spmod`。
+1. 下载本 Release 中的 `plugin-dev.saltupdater-1.1.0.spmod`。
 2. Salt Player → **设置 → 创意工坊 → 模组管理 → 导入模组**。
 3. 选择 `.spmod`，确认后启用。
-4. 打开该模组的 **配置 → 打开模组更新中心**。
+4. 第一次启用会请求可选的 **快捷键** 权限；拒绝也不影响更新中心和市场，只是没有 Ctrl+Alt+U。
+5. 打开该模组的 **配置 → 打开模组更新中心** 或 **打开插件市场**。
 
 ## 校验
 
 ```text
-SHA-256: ed5cc6fad7c0a03cf60f35686e5f8a5131f5a7c9d7e9cd3f8dc7c6fffb15ae6c
+SHA-256: 5e7bf2313202e092ba49d673eeb6e5f77210b65a10b979879b5454081a220bca
 ```
 
 ## 已知限制
 
-- 只支持 GitHub Releases 中的 `.spmod` 资产；没有 `.spmod` 的 Release 会提示手动下载。
-- 标签需要是 `v1.2.3`、`1.2.3.4` 这类可比较版本号；`nightly` 这类标签无法比较。
-- 直接替换时，已加载的旧插件类不会在运行中的 JVM 里重新加载；如果播放器仍显示旧版本，重启后生效。
-- Steam 创意工坊订阅的模组由 Steam 更新，本插件不处理 Steam 订阅。
-
-## 在插件库中找到本插件
-
-本仓库已添加 GitHub topic **`salt-player-plugins`**。在 Salt Player 的 **模组管理 → 寻找模组** 中，应可通过该 topic 发现本仓库。如果列表有缓存，请稍后重试或重启播放器。
+- Steam 市场只做浏览/搜索/跳转；Steam 文件必须由 Steam 客户端下载，本插件不提供绕过 Steam 的下载方式。
+- GitHub 市场搜索与更新检查共享 GitHub API 限额；大量使用建议填写 Token。
+- 只支持 Release 中的 `.spmod` 资产；没有 `.spmod` 的仓库会在安装时提示。
+- 标题栏悬浮按钮是实验性独立窗口，不修改宿主 Compose UI；位置/显示可能受显示器缩放和多屏影响。
+- 直接替换已加载插件后通常需要重启 SPW；文件被占用时会自动转为关闭后安装。
+- Steam 创意工坊订阅的模组仍由 Steam 管理；本插件不会调用 Steam 客户端 API。
