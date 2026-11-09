@@ -1,10 +1,5 @@
 # 模组更新中心（Salt Player for Windows）
 
-[![Release](https://img.shields.io/github/v/release/KylinZhangQAQ/SaltPlayer-Mod-Updater?label=release)](https://github.com/KylinZhangQAQ/SaltPlayer-Mod-Updater/releases/latest)
-[![AI Generated](https://img.shields.io/badge/AI-100%25%20AI%20generated-blueviolet)](https://github.com/KylinZhangQAQ/SaltPlayer-Mod-Updater)
-[![Microsoft Store](https://img.shields.io/badge/Salt%20Player-Microsoft%20Store-0078D4)](https://github.com/KylinZhangQAQ/SaltPlayer-Mod-Updater)
-[![GitHub API](https://img.shields.io/badge/GitHub%20API-60%20req%2Fh-orange)](https://github.com/KylinZhangQAQ/SaltPlayer-Mod-Updater#-github-api-限制重要)
-
 一个面向 **Salt Player for Windows（SPW）** 的本地插件管理工具。它会扫描 `workshop/plugins` 下的全部模组，读取每个模组清单里的 GitHub 仓库地址，检查 GitHub Releases，并提供带进度、错误码、失败原因和确认安装的一键更新流程。
 
 > **AI 声明 / AI Disclosure**  
@@ -17,7 +12,7 @@
 > 未登录 GitHub 的匿名 API 限额只有 **60 次/小时**，批量检查、频繁重试或连续检查多个模组时很容易触发 `403 rate limit`。  
 > 建议在 **设置 → GitHub Token** 中填入只勾选 `public_repo` 的 Token；Token 只保存在本机插件数据目录，不会上传。触发限制时界面会显示 `GH-403-RATE` 和恢复时间。
 
-| 已安装模组 | 插件市场（Steam 筛选） |
+| 已安装模组 | 插件市场（GitHub / Steam） |
 | --- | --- |
 | ![已安装模组](screenshots/installed.png) | ![插件市场](screenshots/ui-java.png) |
 
@@ -26,7 +21,7 @@
 - **扫描全部已安装模组**：从 PF4J `MANIFEST.MF` 读取 `Plugin-Id`、`Plugin-Version`、`Plugin-Name`、`Plugin-Provider`、`Plugin-Open-Source-Url`。
 - **GitHub Releases 检查**：读取最新正式 Release（可选包含 Pre-release），按语义化版本比较，自动选择 `.spmod` 资产。
 - **缺少仓库地址时可手动补充**：在详情面板点“设置仓库”，支持 `https://github.com/作者/仓库`、`作者/仓库`、SSH 地址；映射保存在插件数据目录。
-- **人类可读的下载进度**：进度条、已下载/总大小、实时速度、取消按钮。
+- **人类可读的下载进度**：右下角悬浮圆环实时显示百分比，悬停可看已下载/总大小与实时速度，点击即可取消下载。
 - **明确的失败原因**：错误代码 + 中文原因 + 处理建议 + 可复制的技术详情。
 - **下载后二次确认**：显示版本、安装包、大小、SHA-256，确认后才安装。
 - **直接安装 + 关闭后安装兜底**：
@@ -37,14 +32,14 @@
 - **插件市场**：GitHub 与 Steam 双源浏览、搜索和分类；GitHub 可直接安装/更新，Steam 只做展示并跳转到 Steam 客户端订阅；两个来源永远分组显示，不混在一起。
 - **备份管理**：可以彻底关闭备份、设置保留份数，并一键清理全部历史备份。
 - **Token 教程**：内置 GitHub Token 获取步骤，说明匿名 60 次/小时与 Token 限额差异。
-- **顶部入口**：实验性标题栏悬浮按钮；同时提供 `Ctrl+Alt+U` 全局快捷键和托盘菜单，按钮失效时仍可一键检查。
+- **顶部入口**：标题栏原生按钮（需要 `class-transform` 权限）、`Ctrl+Alt+U` 全局快捷键、配置页按钮。不提供托盘图标。
 - **现代卡片 UI**：浅色/深色自适应，统一圆角、按钮、开关、输入框、对话框和来源徽章。
 - **网络适配**：可填 GitHub Token（提高 API 限额）、代理；代理留空时自动使用 Windows 系统代理，填 `direct` 强制直连。
-- **零高危权限**：只申请可选的 `key-bindings`（用于快捷键），不申请 `library-read` 或 `class-transform`。
+- **按需权限**：`key-bindings` 用于全局快捷键，`class-transform` 用于标题栏原生按钮；两者不可用时其余功能照常。
 
 ## 安装
 
-1. 从 [Releases](https://github.com/KylinZhangQAQ/SaltPlayer-Mod-Updater/releases/latest) 下载 `plugin-dev.saltupdater-1.1.0.spmod`。
+1. 下载 `dist/plugin-dev.saltupdater-1.1.0.spmod`。
 2. 打开 Salt Player → **设置 → 创意工坊 → 模组管理 → 导入模组**。
 3. 选择 `.spmod`，确认名称后导入。
 4. 在模组操作菜单选择 **启用**；本插件不申请权限，直接启用即可。
@@ -76,7 +71,7 @@
 - **插件市场**：搜索 GitHub 与 Steam 插件，按来源分组显示。
 
 市场里：
-- **GitHub 插件**：来自 GitHub topic `salt-player-plugins` 的仓库，可打开仓库或直接安装/更新；安装会读取最新 Release 的 `.spmod`。
+- **GitHub 插件**：来自 GitHub topic `salt-player-plugins` 的仓库，可打开仓库或直接安装/更新；安装会读取最新 Release 的 `.spmod`。新插件安装后如果模组管理仍显示未启用，请手动启用一次；已有插件的更新会保留原启用状态。
 - **Steam 创意工坊**：只展示标题、封面、简介、订阅数和更新时间，点击 **在 Steam 打开** 跳转到 Steam 页面。Steam 内容由 Steam 客户端订阅和下载，本插件不绕过 Steam。
 - 来源筛选：全部 / GitHub / Steam；搜索会同时查询两个来源，但结果始终分节展示，不会混淆来源。
 
@@ -209,10 +204,23 @@ src/main/java/dev/saltupdater/
     ProxySupport.java         设置代理 + Windows 系统代理自动检测
     Json.java                 无第三方依赖的 JSON 读写
   ui/
-    UpdateCenterWindow.java   更新中心、标签页、详情和对话框
+    UpdateCenterWindow.java   更新中心窗口、页签、批量更新与各类对话框
     MarketPanel.java          GitHub + Steam 双源插件市场
+    InstalledListPanel.java   已安装列表：搜索、分类、选中
+    PluginDetailPanel.java    右侧详情卡：版本、状态条、操作、更新日志
+    DownloadFloat.java        右下角悬浮下载指示器（进度环 + 点击取消）
+    PluginRowPanel.java       101px 列表行
+    HeroPanel.java            顶部 Hero：标题、副标题、动作按钮、页签
+    BackdropPanel.java        背景渐变、柔光斑与绸带
+    TabStrip.java             页签条与激活下划线
+    PillButton.java           56px 胶囊动作按钮
+    DetailButton.java         56px 详情主/次按钮
+    SearchBar.java            52px 搜索框与结果计数
+    FilterChip.java           44px 分类 chip
+    Theme.java                颜色、字体与设计令牌（浅色/深色）
+    Icons.java                线性矢量图标
     ImageCache.java           市场封面异步加载
-    TitlebarButton.java       实验性标题栏悬浮按钮（JNA）
+    WindowTitleBar.java       无边框窗口标题栏
 ```
 
 ## 安全与隐私
@@ -234,12 +242,6 @@ src/main/java/dev/saltupdater/
 - 直接替换文件时，已经加载的插件类不会在运行中的 JVM 里重新加载；如果播放器仍显示旧版本，重启后生效。文件被占用时会自动转为关闭后安装。
 - 匿名 GitHub API 限额为 60 次/小时；批量检查较多模组时建议填写 Token。
 - 本插件自身的仓库是 <https://github.com/KylinZhangQAQ/SaltPlayer-Mod-Updater>，因此它也可以参与自更新；但正在运行的插件文件可能被占用，更新自身时通常会走“关闭后安装”。
-
-## 在插件库中找到本插件
-
-本仓库已添加 GitHub topic **`salt-player-plugins`**。在 Salt Player 的 **模组管理 → 寻找模组** 中，应可通过该 topic 发现本仓库；如果列表有缓存，请稍后重试或重启播放器。
-
-也可以直接打开 GitHub topic 页面查看：<https://github.com/topics/salt-player-plugins>
 
 ## 许可
 
