@@ -1,6 +1,6 @@
 # 模组更新中心（Salt Player for Windows）
 
-<p align="center"><img src="screenshots/topic-banner.png" alt="模组更新中心 1.3.1" width="900"></p>
+<p align="center"><img src="screenshots/topic-banner.png" alt="模组更新中心 1.4.1" width="900"></p>
 
 一个面向 **Salt Player for Windows（SPW）** 的本地插件管理工具。它会扫描 `workshop/plugins` 下的全部模组，读取每个模组清单里的 GitHub 仓库地址，检查 GitHub Releases，并提供带进度、错误码、失败原因和确认安装的一键更新流程。
 
@@ -31,7 +31,7 @@
   - 如果文件被 Salt Player 占用，自动生成后台安装任务，等播放器退出后备份旧版、解压新版、失败自动回滚，并可自动重启。
 - **安装前校验**：ZIP 完整性、路径穿越、插件 ID 与 Release 版本一致性、SHA-256（Release 提供 digest 时）。
 - **自动检查**：启动时检查 / 每日检查 / 仅手动，三选一；默认启动时检查并提示。
-- **插件市场**：GitHub 与 Steam 双源浏览、搜索和分类；GitHub 可直接安装/更新，Steam 只做展示并跳转到 Steam 客户端订阅；两个来源永远分组显示，不混在一起。
+- **插件市场**：GitHub 与 Steam 双源浏览、搜索、分类和排序；GitHub 可直接安装/更新，Steam 只做展示并跳转到 Steam 客户端订阅；两个来源永远分组显示，不混在一起。
 - **备份管理**：可以彻底关闭备份、设置保留份数，并一键清理全部历史备份。
 - **Token 教程**：内置 GitHub Token 获取步骤，说明匿名 60 次/小时与 Token 限额差异。
 - **顶部入口**：标题栏原生按钮（需要 `class-transform` 权限）、`Ctrl+Alt+U` 全局快捷键、配置页按钮。不提供托盘图标。
@@ -41,7 +41,7 @@
 
 ## 安装
 
-1. 下载 `plugin-dev.saltupdater-1.3.1.spmod`。
+1. 下载 `plugin-dev.saltupdater-1.4.1.spmod`。
 2. 打开 Salt Player → **设置 → 创意工坊 → 模组管理 → 导入模组**。
 3. 选择 `.spmod`，确认名称后导入。
 4. 在模组操作菜单选择 **启用**；本插件不申请权限，直接启用即可。
@@ -76,6 +76,7 @@
 - **GitHub 插件**：来自 GitHub topic `salt-player-plugins` 的仓库，可打开仓库或直接安装/更新；安装会读取最新 Release 的 `.spmod`。新插件安装后如果模组管理仍显示未启用，请手动启用一次；已有插件的更新会保留原启用状态。
 - **Steam 创意工坊**：只展示标题、封面、简介、订阅数和更新时间，点击 **在 Steam 打开** 跳转到 Steam 页面。Steam 内容由 Steam 客户端订阅和下载，本插件不绕过 Steam。
 - 来源筛选：全部 / GitHub / Steam；搜索会同时查询两个来源，但结果始终分节展示，不会混淆来源。
+- **排序**：统一提供「推荐排序 / 最近更新 / 名称」；GitHub 额外提供「Star 最多」，Steam 额外提供「订阅最多」。切换来源时自动刷新可用排序；不适用时回到推荐排序。
 
 ### 备份管理
 
@@ -166,7 +167,7 @@ Set-ExecutionPolicy -Scope Process Bypass
 产物：
 
 ```
-build/libs/plugin-dev.saltupdater-1.1.0.spmod
+build/libs/plugin-dev.saltupdater-1.4.1.spmod
 ```
 
 `build.ps1` 只做三件事：`javac --release 25` 编译、复制资源、用 `tools/Build.java` 生成 `.spmod`。插件运行时只依赖 `java.base` + `java.desktop`，不打包任何第三方运行时库。
