@@ -1,6 +1,6 @@
 # 模组更新中心（Salt Player for Windows）
 
-<p align="center"><img src="screenshots/topic-banner.png" alt="模组更新中心 1.3.0" width="900"></p>
+<p align="center"><img src="screenshots/topic-banner.png" alt="模组更新中心 1.3.1" width="900"></p>
 
 一个面向 **Salt Player for Windows（SPW）** 的本地插件管理工具。它会扫描 `workshop/plugins` 下的全部模组，读取每个模组清单里的 GitHub 仓库地址，检查 GitHub Releases，并提供带进度、错误码、失败原因和确认安装的一键更新流程。
 
@@ -41,7 +41,7 @@
 
 ## 安装
 
-1. 下载 `plugin-dev.saltupdater-1.3.0.spmod`。
+1. 下载 `plugin-dev.saltupdater-1.3.1.spmod`。
 2. 打开 Salt Player → **设置 → 创意工坊 → 模组管理 → 导入模组**。
 3. 选择 `.spmod`，确认名称后导入。
 4. 在模组操作菜单选择 **启用**；本插件不申请权限，直接启用即可。
