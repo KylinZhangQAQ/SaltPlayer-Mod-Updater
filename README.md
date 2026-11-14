@@ -1,10 +1,10 @@
 ﻿# 模组更新中心（Salt Player for Windows）
 
-<p align="center"><img src="screenshots/social-preview-1.5.png" alt="模组更新中心 1.5.0" width="900"></p>
+<p align="center"><img src="screenshots/social-preview-1.6.png" alt="模组更新中心 1.6.0" width="900"></p>
 
 一个面向 **Salt Player for Windows（SPW）** 的本地插件管理工具。它会扫描 `workshop/plugins` 下的全部模组，读取每个模组清单里的 GitHub 仓库地址，检查 GitHub Releases，并提供带进度、错误码、失败原因和确认安装的一键更新流程。
 
-当前版本：**1.5.0** · [更新日志](CHANGELOG.md)
+当前版本：**1.6.0** · [更新日志](CHANGELOG.md)
 
 > **AI 声明 / AI Disclosure**  
 > 本项目的插件代码、界面、构建脚本和文档均由 AI 生成；仅使用 SPW Workshop API、PF4J 等第三方依赖。没有人工编写插件业务代码。
@@ -36,6 +36,10 @@
 - **插件市场**：GitHub 与 Steam 双源浏览、搜索、分类和排序；GitHub 可直接安装/更新，Steam 只做展示并跳转到 Steam 客户端订阅；两个来源永远分组显示，不混在一起。
 - **README 阅读**：市场详情中的 README 支持 emoji、链接和文本排版，自动铺满右侧并滚动阅读；README 标题栏的「更多」可直接打开 GitHub 网页版 README。
 - **下载缓存管理**：安装成功后自动清理安装包；安装失败保留文件，重启后可复用；首次打开会提示处理遗留下载缓存，并在删除前显示具体路径。
+- **历史版本安装**：市场安装按钮支持分裂菜单，默认安装最新版本，也可以选择任意历史 Release。
+- **ZIP 安装包**：优先使用 `.spmod`，同时识别包含插件清单的 `.zip`；源码压缩包和没有插件清单的文件会被明确拒绝。
+- **忽略更新**：已安装插件支持忽略本次或永久忽略更新提示，也可以随时恢复。
+- **更统一的市场界面**：打开仓库直接进入发布页，README 通过「更多」打开 GitHub 网页；分类、标签页和行分隔线会随窗口和字体自适应。
 - **字体缩放适配**：支持 85%–125% 字体缩放，详情、市场、分类、README 与更新日志同步适配，窗口自由缩放时不裁切文字。
 - **备份管理**：可以彻底关闭备份、设置保留份数，并一键清理全部历史备份。
 - **Token 教程**：内置 GitHub Token 获取步骤，说明匿名 60 次/小时与 Token 限额差异。
@@ -46,7 +50,7 @@
 
 ## 安装
 
-1. 下载 `plugin-dev.saltupdater-1.5.0.spmod`。
+1. 下载 `plugin-dev.saltupdater-1.6.0.spmod`。
 2. 打开 Salt Player → **设置 → 创意工坊 → 模组管理 → 导入模组**。
 3. 选择 `.spmod`，确认名称后导入。
 4. 在模组操作菜单选择 **启用**；本插件不申请权限，直接启用即可。
@@ -172,7 +176,7 @@ Set-ExecutionPolicy -Scope Process Bypass
 产物：
 
 ```
-build/libs/plugin-dev.saltupdater-1.5.0.spmod
+build/libs/plugin-dev.saltupdater-1.6.0.spmod
 ```
 
 `build.ps1` 只做三件事：`javac --release 25` 编译、复制资源、用 `tools/Build.java` 生成 `.spmod`。插件运行时只依赖 `java.base` + `java.desktop`，不打包任何第三方运行时库。
