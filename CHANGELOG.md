@@ -4,6 +4,18 @@
 `build/libs/plugin-dev.saltupdater-<version>.spmod`，并写入 manifest 的
 `Plugin-Version`。每次交付递增小版本号。
 
+## 1.6.4 — 2026-11-16
+
+一次针对另一台电脑安装/重启失败的修复版本。
+
+### 修复
+
+- 关闭后安装改用 Windows `tar.exe` 解压，支持超过 MAX_PATH 的深目录插件包；旧解压方式仅在 tar 不可用时回退。
+- 修复另一台电脑上 `Get-AppxPackage` 被拒绝访问后无法取得 AppId、导致自动重启失败的问题。
+- 重启优先使用固定 AppId `shell:AppsFolder\<PackageFamily>!SaltPlayerforWindows`，不再依赖运行期查询包清单。
+- 多个关闭后安装任务只在最后一个完成后重启一次，避免连续更新时重复启动实例。
+- 安装进行中继续阻止打开旧状态页面，安装成功后才清理下载包。
+
 ## 1.6.2 — 2026-11-16
 
 一次针对慢速电脑安装体验的修复版本。
