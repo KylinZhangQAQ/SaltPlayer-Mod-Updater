@@ -2,8 +2,8 @@
 
 ## 基线
 
-- 基线版本：`1.6.4`（长路径解压、已知 AppId 重启、安装串行化）
-- 上一发布版本：`1.6.2`
+- 基线版本：`1.6.7`（Java staging 安装、5 秒静默窗口、单次重启）
+- 上一发布版本：`1.6.0`
 - 宿主：Microsoft Store Salt Player for Windows 1.19.3
 - Workshop API：`0.1.0-dev22`
 - JDK：25
