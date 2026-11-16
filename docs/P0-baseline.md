@@ -2,8 +2,8 @@
 
 ## 基线
 
-- 基线版本：`1.6.7`（Java staging 安装、5 秒静默窗口、单次重启）
-- 上一发布版本：`1.6.0`
+- 基线版本：`1.6.8`（自更新快速路径、staging 进度、静默窗口）
+- 上一发布版本：`1.6.7`
 - 宿主：Microsoft Store Salt Player for Windows 1.19.3
 - Workshop API：`0.1.0-dev22`
 - JDK：25
