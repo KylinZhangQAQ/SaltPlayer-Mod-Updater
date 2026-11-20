@@ -2,8 +2,8 @@
 
 ## 基线
 
-- 基线版本：`1.6.9`（自动重启预算、自更新快速路径、staging 进度）
-- 上一发布版本：`1.6.8`
+- 基线版本：`1.6.10`（多分辨率/DPI/字体缩放适配）
+- 上一发布版本：`1.6.9`
 - 宿主：Microsoft Store Salt Player for Windows 1.19.3
 - Workshop API：`0.1.0-dev22`
 - JDK：25
