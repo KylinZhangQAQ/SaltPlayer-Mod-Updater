@@ -1,10 +1,10 @@
 ﻿# 模组更新中心（Salt Player for Windows）
 
-<p align="center"><img src="screenshots/social-preview-1.7.0.png" alt="模组更新中心 1.7.0" width="900"></p>
+<p align="center"><img src="screenshots/social-preview-1.7.1.png" alt="模组更新中心 1.7.1" width="900"></p>
 
 一个面向 **Salt Player for Windows（SPW）** 的本地插件管理工具。它会扫描 `workshop/plugins` 下的全部模组，读取每个模组清单里的 GitHub 仓库地址，检查 GitHub Releases，并提供带进度、错误码、失败原因和确认安装的一键更新流程。
 
-当前版本：**1.7.0** · [更新日志](CHANGELOG.md)
+当前版本：**1.7.1** · [更新日志](CHANGELOG.md)
 
 > **AI 声明 / AI Disclosure**  
 > 本项目的插件代码、界面、构建脚本和文档均由 AI 生成；仅使用 SPW Workshop API、PF4J 等第三方依赖。没有人工编写插件业务代码。
@@ -50,7 +50,7 @@
 
 ## 安装
 
-1. 下载 `plugin-dev.saltupdater-1.7.0.spmod`。
+1. 下载 `plugin-dev.saltupdater-1.7.1.spmod`。
 2. 打开 Salt Player → **设置 → 创意工坊 → 模组管理 → 导入模组**。
 3. 选择 `.spmod`，确认名称后导入。
 4. 在模组操作菜单选择 **启用**；本插件不申请权限，直接启用即可。
@@ -176,7 +176,7 @@ Set-ExecutionPolicy -Scope Process Bypass
 产物：
 
 ```
-build/libs/plugin-dev.saltupdater-1.7.0.spmod；内部测试包使用 `build.ps1 -Test`，文件名带 `-test.yyyyMMddHHmm`，manifest 版本仍为 1.6.10。
+build/libs/plugin-dev.saltupdater-1.7.1.spmod；内部测试包使用 `build.ps1 -Test`，文件名带 `-test.yyyyMMddHHmm`，manifest 版本保持当前正式版本号。
 ```
 
 `build.ps1` 只做三件事：`javac --release 25` 编译、复制资源、用 `tools/Build.java` 生成 `.spmod`。插件运行时只依赖 `java.base` + `java.desktop`，不打包任何第三方运行时库。
